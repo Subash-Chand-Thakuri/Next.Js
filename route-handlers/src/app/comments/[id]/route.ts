@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import {comments} from "../data"
 
 export async function GET(request:Request,{params}:{
@@ -5,15 +6,22 @@ export async function GET(request:Request,{params}:{
         id:string;
     }
 }){
-    try {
-        const comment = comments.find((obj) => obj.id === Number(params.id));
-        if (!comment) {
-          return new Response("Not Found", { status: 404, statusText: "Comment not found" });
-        }
-        return new Response(JSON.stringify(comment), { status: 200, statusText: "OK" });
-      } catch (error:any) {
-        return new Response(error.message, { status: 500, statusText: "Internal Server Error" });
-      }
+    // try {
+    //     const comment = comments.find((obj) => obj.id === Number(params.id));
+    //     if (!comment) {
+    //       return new Response("Not Found", { status: 404, statusText: "Comment not found" });
+    //     }
+    //     return new Response(JSON.stringify(comment), { status: 200, statusText: "OK" });
+    //   } catch (error:any) {
+    //     return new Response(error.message, { status: 500, statusText: "Internal Server Error" });
+    //   }
+
+    if(parseInt(params.id)>comments.length){
+      redirect("/comments");
+    }
+    const comment = comments.find((obj)=> obj.id === parseInt(params.id));
+    return Response.json(comment);
+
       
 }
 
